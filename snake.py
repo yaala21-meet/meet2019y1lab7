@@ -5,7 +5,7 @@ import random
 #variables
     #screen
 xsize = 800
-ysize = 500
+ysize = 600
 up_edge = ysize/2
 down_edge = -ysize/2
 right_edge = xsize/2
@@ -27,7 +27,26 @@ snake.direction = "Up"
 #lists
 pos_list = []
 stamp_list = []
-
+#food
+    #apple
+turtle.register_shape("apple.gif")
+apple = turtle.clone()
+apple.shape("apple.gif")
+apple.hideturtle()
+apple_pos = []
+apple_stamps = []
+apple.goto(100, 100)
+apple_pos.append((100,100))
+apple_stamps.append(apple.stamp())
+    #goldapple
+turtle.register_shape("goldapple.gif")
+gapple = turtle.clone()
+gapple.shape("goldapple.gif")
+gapple.hideturtle()
+gapple_pos = [(-100, -100)]
+gapple_stamps = []
+gapple.goto(gapple_pos[0])
+gapple_stamps.append(gapple.stamp())
 
 ### FUNCTIONS
 #drawing
@@ -64,24 +83,42 @@ def move():
     elif snake.ycor() < down_edge:
         print("You hit the bottom edge! Game over!")
         quit()
+        #eat apple
+    if snake.pos() in apple_pos:
+        apple_index = apple_pos.index(snake.pos())
+        apple.clearstamp(apple_stamps[apple_index])
+        apple_pos.pop(apple_index)
+        apple_stamps.pop(apple_index)
+        print("Yummy apple!")
+        #eat gapple
+    if snake.pos() in gapple_pos:
+        gapple_index = gapple_pos.index(snake.pos())
+        gapple.clearstamp(gapple_stamps[gapple_index])
+        gapple_pos.pop(gapple_index)
+        gapple_stamps.pop(gapple_index)
+        print("Whoa, a golden apple!!!")
         #keep going
     turtle.ontimer(move, step_time)
+#directions
 def up():
     snake.direction = "Up"
-    #move()
     print("Going up!")
 def down():
     snake.direction = "Down"
-    #move()
     print("Going down!")
 def right():
     snake.direction = "Right"
-    #move()
     print("Going right!")
 def left():
     snake.direction = "Left"
-    #move()
     print("Going left!")
+#apple
+#def make_apple():
+food_x = random.randint(down_edge/square_size+1, up_edge/square_size-1)
+food_y = random.randint(left_edge/square_size+1, right_edge/square_size-1)
+apple.goto(food_x*20,food_y*20)
+apple_stamps.append(apple.stamp())
+apple_pos.append(apple.pos())
 
 
 ### PLAYING
